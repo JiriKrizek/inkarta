@@ -49,6 +49,8 @@ class InKarta
   end
 
   def get_transactions
+    transactions = []
+
     xpath='//*[@id="data2"]/table/tr'
     table=@page.xpath(xpath)
 
@@ -58,16 +60,16 @@ class InKarta
       date = DateTime.strptime(date, '%d.%m.%Y %H:%M:%S')
       operation = t.xpath('td[2]/text()').to_s
       detail = t.xpath('td[3]/text()').to_s
-      value = t.xpath('td[4]/text()').to_s
-      value_ep = t.xpath('td[5]/text()').to_s
-      value_ep_new = t.xpath('td[6]/text()').to_s
+      value = to_int(t.xpath('td[4]/text()').to_s)
+      value_ep = to_int(t.xpath('td[5]/text()').to_s)
+      value_ep_new = to_int(t.xpath('td[6]/text()').to_s)
       place = t.xpath('td[7]/text()').to_s
 
       operation += " (#{detail})" unless detail.empty?
 
-      o = Operation.new(date, operation, value, value_ep, value_ep_new, place)
-      p o
+      transactions << Operation.new(date, operation, value, value_ep, value_ep_new, place)
     }
+    transactions
   end
 
 private
@@ -86,8 +88,11 @@ private
   def parse_html_to_int(xpath)
     get_ep_trans_page()
 
-    value = @page.xpath(xpath).to_s
-    Integer(value.split(",").first)
+    to_int(@page.xpath(xpath).to_s)
+  end
+
+  def to_int(string)
+    Integer(string.split(",").first)
   end
 
 end
@@ -97,4 +102,6 @@ ik.load_cookie
 puts "Aktualni hodnota penezenky v cipu karty: \t#{ik.get_wallet_value} Kč"
 puts "Aktualni hodnota EP k prevodu: \t\t\t#{ik.get_transfer_value} Kč"
 
-p ik.get_transactions
+ik.get_transactions.reverse.each { |transaction|
+  puts transaction.to_s
+}

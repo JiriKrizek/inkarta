@@ -12,6 +12,6 @@ class Operation
   end
 
   def to_s
-    puts "Date: #{@date}\n\toperation: #{@operation}\n\tvalue: #{@value}\t value_ep: #{@value_ep}\t value_ep_new: #{@value_ep_new}\n\tplace: #{@place}"
+    "Date: #{@date}\n\toperation: #{@operation}\n\tvalue: #{@value}\t value_ep: #{@value_ep}\t value_ep_new: #{@value_ep_new}\n\tplace: #{@place}"
   end
 end
