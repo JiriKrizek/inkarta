@@ -37,6 +37,17 @@ class InKarta
       return nil
     end
 
+    last_uri = response.request.last_uri.to_s
+    if last_uri != 'https://moje.inkarta.cz/Card/Info'
+      STDERR.puts "Cookie not returned, probably invalid card id or password"
+      return nil
+    end
+
+    if response.request.options[:headers].nil?
+      STDERR.puts "Headers are empty"
+      return nil
+    end
+
     @cookie = response.request.options[:headers]['Cookie']
   end
 
@@ -98,10 +109,11 @@ private
 end
 
 ik = InKarta.new(Credentials::CLIENT_USER, Credentials::CLIENT_PASS)
-ik.load_cookie
-puts "Aktualni hodnota penezenky v cipu karty: \t#{ik.get_wallet_value} Kč"
-puts "Aktualni hodnota EP k prevodu: \t\t\t#{ik.get_transfer_value} Kč"
+unless ik.load_cookie.nil?
+  puts "Aktualni hodnota penezenky v cipu karty: \t#{ik.get_wallet_value} Kč"
+  puts "Aktualni hodnota EP k prevodu: \t\t\t#{ik.get_transfer_value} Kč"
 
-ik.get_transactions.reverse.each { |transaction|
-  puts transaction.to_s
-}
+  #ik.get_transactions.reverse.each { |transaction|
+  #  puts transaction.to_s
+  #}
+end
