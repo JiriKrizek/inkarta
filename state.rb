@@ -24,5 +24,24 @@ unless File.exists?(DB_PATH)
 end
 
 class State < ActiveRecord::Base
+  include Comparable
   attr_accessible :datetime, :card, :wallet
+
+  def <=>(another_state)
+    if self.card > another_state.card
+      return 1
+    elsif self.card < another_state.card
+      return -1
+    end
+    return 0
+  end
+
+  def sum_value
+    card+wallet
+  end
+
+  def under_limit?(limit)
+    sum_value <= limit
+  end
+
 end
