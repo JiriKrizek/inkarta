@@ -6,9 +6,9 @@ require 'net/https'
 require 'nokogiri'
 require 'uri'
 
-require './credentials'
-require './operation'
-require './state'
+require_relative 'lib/credentials'
+require_relative 'lib/operation'
+require_relative 'lib/state'
 
 class InKarta
   def initialize(user_id, user_passwd)
