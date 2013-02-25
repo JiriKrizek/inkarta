@@ -120,11 +120,11 @@ if DEBUG
   puts "Aktualni hodnota EP k prevodu: \t\t\t#{ik.get_wallet_value} Kč"
 end
 
-  state = State.new
+# state = State.new
 
-  state.datetime = Time.new()
-  state.card = ik.get_card_value
-  state.wallet = ik.get_wallet_value
+# state.datetime = Time.new()
+# state.card = ik.get_card_value
+# state.wallet = ik.get_wallet_value
 
   state.save
 end
