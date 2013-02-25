@@ -14,9 +14,15 @@ GEM
     activemodel (3.2.11)
       activesupport (= 3.2.11)
       builder (~> 3.0.0)
+    activerecord (3.2.11)
+      activemodel (= 3.2.11)
+      activesupport (= 3.2.11)
+      arel (~> 3.0.2)
+      tzinfo (~> 0.3.29)
     activesupport (3.2.11)
       i18n (~> 0.6)
       multi_json (~> 1.0)
+    arel (3.0.2)
     builder (3.0.4)
     erubis (2.7.0)
     hike (1.2.1)
@@ -38,12 +44,16 @@ GEM
       multi_json (~> 1.0)
       rack (~> 1.0)
       tilt (~> 1.1, != 1.3.0)
+    sqlite3 (1.3.7)
     tilt (1.3.3)
+    tzinfo (0.3.35)
 
 PLATFORMS
   ruby
 
 DEPENDENCIES
   actionpack
+  activerecord
   httparty
   nokogiri
+  sqlite3 (~> 1.3.7)
