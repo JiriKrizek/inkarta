@@ -110,11 +110,15 @@ private
 end
 
 ik = InKarta.new(Credentials::CLIENT_USER, Credentials::CLIENT_PASS)
-unless ik.load_cookie.nil?
-  if DEBUG
-    puts "Aktualni hodnota penezenky v cipu karty: \t#{ik.get_card_value} Kč"
-    puts "Aktualni hodnota EP k prevodu: \t\t\t#{ik.get_wallet_value} Kč"
-  end
+if ik.load_cookie.nil?
+  STDERR.puts "Could not load cookie. Exitting"
+  exit 1
+end
+
+if DEBUG
+  puts "Aktualni hodnota penezenky v cipu karty: \t#{ik.get_card_value} Kč"
+  puts "Aktualni hodnota EP k prevodu: \t\t\t#{ik.get_wallet_value} Kč"
+end
 
   state = State.new
 
