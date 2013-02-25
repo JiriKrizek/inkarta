@@ -7,7 +7,8 @@ require 'nokogiri'
 require 'uri'
 
 require './credentials'
-require "./operation"
+require './operation'
+require './state'
 
 class InKarta
   def initialize(user_id, user_passwd)
@@ -51,11 +52,11 @@ class InKarta
     @cookie = response.request.options[:headers]['Cookie']
   end
 
-  def get_wallet_value
+  def get_card_value
     parse_html_to_int('//*[@id="data2"]/p[1]/strong[1]/text()')
   end
 
-  def get_transfer_value
+  def get_wallet_value
     parse_html_to_int('//*[@id="data2"]/p[1]/strong[2]/text()')
   end
 
@@ -110,10 +111,16 @@ end
 
 ik = InKarta.new(Credentials::CLIENT_USER, Credentials::CLIENT_PASS)
 unless ik.load_cookie.nil?
-  puts "Aktualni hodnota penezenky v cipu karty: \t#{ik.get_wallet_value} Kč"
-  puts "Aktualni hodnota EP k prevodu: \t\t\t#{ik.get_transfer_value} Kč"
+  if DEBUG
+    puts "Aktualni hodnota penezenky v cipu karty: \t#{ik.get_card_value} Kč"
+    puts "Aktualni hodnota EP k prevodu: \t\t\t#{ik.get_wallet_value} Kč"
+  end
 
-  #ik.get_transactions.reverse.each { |transaction|
-  #  puts transaction.to_s
-  #}
+  state = State.new
+
+  state.datetime = Time.new()
+  state.card = ik.get_card_value
+  state.wallet = ik.get_wallet_value
+
+  state.save
 end
