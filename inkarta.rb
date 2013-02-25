@@ -126,5 +126,20 @@ end
 # state.card = ik.get_card_value
 # state.wallet = ik.get_wallet_value
 
-  state.save
+# state.save
+
+result = State.find(:all, :order => "id desc", :limit => 2)
+current_state = result[0]
+prev_state = result[1]
+
+if current_state < prev_state
+  puts "Current state changed, ticket was bought: #{current_state.sum_value-prev_state.sum_value} Kč, new state is #{current_state.sum_value} Kč"
+  limit = 200
+  if current_state.under_limit?(limit)
+    puts "WARNING: Credit dropped under limit #{limit} Kč, new state is #{current_state.sum_value} Kč"
+  end
+elsif current_state > prev_state
+  puts "Current state changed, card credit increased: #{current_state.sum_value-prev_state.sum_value} Kč"
+else
+  puts "No change since last check"
 end
