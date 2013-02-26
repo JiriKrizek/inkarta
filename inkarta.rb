@@ -1,14 +1,21 @@
 #!/usr/bin/env ruby
 # encoding: UTF-8
 
+Bundler.require
+
+require "bundler"
+require "date"
 require 'httparty'
 require 'net/https'
+require 'net/smtp'
 require 'nokogiri'
 require 'uri'
-
+require_relative 'lib/checker'
 require_relative 'lib/credentials'
 require_relative 'lib/operation'
+require_relative 'lib/notif_client'
 require_relative 'lib/state'
+
 
 class InKarta
   def initialize(user_id, user_passwd)
@@ -120,26 +127,16 @@ if DEBUG
   puts "Aktualni hodnota EP k prevodu: \t\t\t#{ik.get_wallet_value} Kč"
 end
 
-# state = State.new
+state = State.new
 
-# state.datetime = Time.new()
-# state.card = ik.get_card_value
-# state.wallet = ik.get_wallet_value
+state.datetime = Time.new()
+state.card = ik.get_card_value
+state.wallet = ik.get_wallet_value
 
-# state.save
+state.save
 
-result = State.find(:all, :order => "id desc", :limit => 2)
-current_state = result[0]
-prev_state = result[1]
+checker = Checker.new()
+checker.add_observer(NotifClient.new(70, Credentials::MAIL[0]))
+#checker.add_observer(NotifClient.new(70, Credentials::MAIL[1]))
 
-if current_state < prev_state
-  puts "Current state changed, ticket was bought: #{current_state.sum_value-prev_state.sum_value} Kč, new state is #{current_state.sum_value} Kč"
-  limit = 200
-  if current_state.under_limit?(limit)
-    puts "WARNING: Credit dropped under limit #{limit} Kč, new state is #{current_state.sum_value} Kč"
-  end
-elsif current_state > prev_state
-  puts "Current state changed, card credit increased: #{current_state.sum_value-prev_state.sum_value} Kč"
-else
-  puts "No change since last check"
-end
+checker.run

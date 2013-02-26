@@ -1,9 +1,5 @@
 #!/usr/bin/env ruby
 # encoding: UTF-8
-require "bundler"
-require "date"
-
-Bundler.require
 
 DB_PATH = 'data/states.db'
 DEBUG = false
@@ -39,9 +35,4 @@ class State < ActiveRecord::Base
   def sum_value
     card+wallet
   end
-
-  def under_limit?(limit)
-    sum_value <= limit
-  end
-
 end

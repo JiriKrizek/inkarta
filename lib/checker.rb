@@ -1,9 +1,34 @@
 #!/usr/bin/env ruby
 # encoding: UTF-8
-require "bundler"
-
-Bundler.require
-
 class Checker
+  attr_reader :curr_state, :prev_state
 
+  def initialize
+    @observers = []
+  end
+
+  def add_observer(observer)
+    raise ArgumentError.new("Add observer #{observer} failed - not NotifClient object") unless observer.is_a? NotifClient
+
+    @observers << observer
+  end
+
+  def notify_observers
+    @observers.each do |o|
+      o.notify(self)
+      puts "notifying #{o.mail}"
+    end
+  end
+
+  def run
+    result = State.find(:all, :order => "id desc", :limit => 2)
+    @curr_state = result[0]
+    @prev_state = result[1]
+
+    if @curr_state != @prev_state
+      self.notify_observers
+    else
+      puts "No change since last check"
+    end
+  end
 end
