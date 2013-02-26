@@ -16,6 +16,7 @@ require_relative 'lib/operation'
 require_relative 'lib/notif_client'
 require_relative 'lib/state'
 
+DEBUG = false
 
 class InKarta
   def initialize(user_id, user_passwd)
