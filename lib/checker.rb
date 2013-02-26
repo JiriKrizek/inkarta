@@ -25,10 +25,6 @@ class Checker
     @curr_state = result[0]
     @prev_state = result[1]
 
-    if @curr_state != @prev_state
-      self.notify_observers
-    else
-      puts "No change since last check"
-    end
+    self.notify_observers
   end
 end

@@ -2,7 +2,6 @@
 # encoding: UTF-8
 
 DB_PATH = 'data/states.db'
-DEBUG = false
 
 ActiveRecord::Base.establish_connection(
   :adapter  => "sqlite3",
