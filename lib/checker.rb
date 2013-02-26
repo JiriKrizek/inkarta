@@ -16,7 +16,7 @@ class Checker
   def notify_observers
     @observers.each do |o|
       o.notify(self)
-      puts "notifying #{o.mail}"
+      puts "notifying #{o.mail}" if DEBUG
     end
   end
 
