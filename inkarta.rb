@@ -128,13 +128,26 @@ if DEBUG
   puts "Aktualni hodnota EP k prevodu: \t\t\t#{ik.get_wallet_value} Kč"
 end
 
-state = State.new
+prevStates = State.find(:all, :order => "id desc", :limit => 2)
+p1 = prevStates[0]
+p2 = prevStates[1]
 
-state.datetime = Time.new()
-state.card = ik.get_card_value
-state.wallet = ik.get_wallet_value
+if p1.sum_value == p2.sum_value
+  print "States are the same" if DEBUG
+else
+  print "States differ" if DEBUG
 
-state.save
+  state = State.new
+
+  state.datetime = Time.new()
+  state.card = ik.get_card_value
+  state.wallet = ik.get_wallet_value
+
+  state.save
+end
+
+
+
 
 checker = Checker.new()
 checker.add_observer(NotifClient.new(100, Credentials::MAIL[0]))
