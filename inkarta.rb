@@ -132,20 +132,19 @@ prevStates = State.find(:all, :order => "id desc", :limit => 2)
 p1 = prevStates[0]
 p2 = prevStates[1]
 
-if p1.sum_value == p2.sum_value
+state = State.new
+
+state.datetime = Time.new()
+state.card = ik.get_card_value
+state.wallet = ik.get_wallet_value
+
+if p1.sum_value == p2.sum_value && p2.sum_value == state.sum_value
   print "States are the same" if DEBUG
 else
   print "States differ" if DEBUG
 
-  state = State.new
-
-  state.datetime = Time.new()
-  state.card = ik.get_card_value
-  state.wallet = ik.get_wallet_value
-
   state.save
 end
-
 
 
 

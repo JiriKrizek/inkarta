@@ -22,7 +22,7 @@ class NotifClient
         puts "WARNING: Credit dropped under limit #{@value} Kč, new state is #{checker.curr_state.sum_value} Kč" if DEBUG
 
         msg = "Zustatek na karte na vlak klesl pod limit #{@value} Kc. Soucasny zustatek je #{checker.curr_state.sum_value} Kc."
-        send_mail(self.mail, msg)
+        send_mail(self.mail, msg) unless DEBUG
       end
     elsif checker.curr_state > checker.prev_state
       puts "Current state changed, card credit increased: #{checker.curr_state.sum_value-checker.prev_state.sum_value} Kč" if DEBUG
