@@ -149,8 +149,7 @@ end
 
 
 checker = Checker.new()
-checker.add_observer(NotifClient.new(100, Credentials::MAIL[0]))
-checker.add_observer(NotifClient.new(70, Credentials::MAIL[0]))
+checker.add_observer(NotifClient.new(100, Credentials::MAIL[0], :charge => true, :always => true))
 checker.add_observer(NotifClient.new(70, Credentials::MAIL[1]))
 
 checker.run

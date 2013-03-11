@@ -23,9 +23,9 @@ class State < ActiveRecord::Base
   attr_accessible :datetime, :card, :wallet
 
   def <=>(another_state)
-    if self.card > another_state.card
+    if self.sum_value > another_state.sum_value
       return 1
-    elsif self.card < another_state.card
+    elsif self.sum_value < another_state.sum_value
       return -1
     end
     return 0
